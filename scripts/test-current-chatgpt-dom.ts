@@ -73,11 +73,7 @@ try {
     2,
   );
   const answer = await readAssistantSnapshot(runtime, 1);
-  assert.equal(
-    answer?.text,
-    "ORACLE_OK",
-    "正常系: 見出しやプロンプトを混ぜず応答を取得する",
-  );
+  assert.equal(answer?.text, "ORACLE_OK", "正常系: 見出しやプロンプトを混ぜず応答を取得する");
   assert.equal(
     await readAssistantSnapshot(runtime, 2),
     null,
