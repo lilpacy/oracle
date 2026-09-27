@@ -571,12 +571,15 @@ function buildModelSelectionExpression(
       Boolean(
         menu?.getAttribute?.('data-testid') === 'composer-intelligence-picker-content' ||
           menu?.querySelector?.(INTELLIGENCE_PICKER_SELECTOR) ||
-          menu?.querySelector?.(ADVANCED_VIEW_SELECTOR),
+          menu?.querySelector?.(ADVANCED_VIEW_SELECTOR) ||
+          menu?.querySelector?.('[data-model-picker-view]'),
       );
     const findUnifiedPickerMenu = () =>
       Array.from(document.querySelectorAll(${menuContainerLiteral})).find(isUnifiedPickerMenu) ??
       null;
     const findAdvancedToggle = (menu) => {
+      const viewToggle = menu?.querySelector?.('[data-model-picker-view-toggle="true"]');
+      if (viewToggle && isVisibleElement(viewToggle)) return viewToggle;
       for (const item of (menu || document).querySelectorAll('[role="menuitem"]')) {
         if (!isVisibleElement(item)) continue;
         if (containsPickerWord(pickerNodeLabel(item), ADVANCED_WORDS)) return item;

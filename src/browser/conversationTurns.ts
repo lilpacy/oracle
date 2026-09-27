@@ -7,9 +7,18 @@ export function buildConversationTurnListExpression(rootExpression = "document")
   return `(() => {
     const root = ${rootExpression};
     const containers = Array.from(root.querySelectorAll(${containerSelector}));
-    return containers.length > 0
-      ? containers
-      : Array.from(root.querySelectorAll(${fallbackSelector}));
+    if (containers.length > 0) return containers;
+    return Array.from(root.querySelectorAll(${fallbackSelector})).map((turn) => {
+      const assistantKey = '[data-chatgpt-search-unit-key$=":assistant"]';
+      if (!turn.matches?.(assistantKey)) return turn;
+      // The current UI renders the completed-turn actions beside the message body.
+      // Never cross into another assistant turn or the page-wide composer/history.
+      for (let parent = turn.parentElement; parent && !parent.matches('main, [role="main"], body'); parent = parent.parentElement) {
+        if (parent.querySelectorAll(assistantKey).length !== 1) break;
+        if (parent.querySelector('button[aria-label="Copy"]:not([data-markdown-text-style="assistant-message"] button)')) return parent;
+      }
+      return turn;
+    });
   })()`;
 }
 

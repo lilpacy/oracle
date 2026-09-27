@@ -807,7 +807,7 @@ function buildCompletionVisibilityExpression(
       if (role === 'assistant') return true;
       const testId = (node.getAttribute('data-testid') || '').toLowerCase();
       if (testId.includes('assistant')) return true;
-      return Boolean(node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
+      return Boolean(node.matches?.(ASSISTANT_SELECTOR) || node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
     };
 
     const turns = ${buildConversationTurnListExpression()};
@@ -1036,7 +1036,7 @@ function buildResponseObserverExpression(
       if (role === 'assistant') return true;
       const testId = (node.getAttribute('data-testid') || '').toLowerCase();
       if (testId.includes('assistant')) return true;
-      return Boolean(node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
+      return Boolean(node.matches?.(ASSISTANT_SELECTOR) || node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
     };
 
     const MIN_TURN_INDEX = ${minTurnLiteral};
@@ -1253,7 +1253,7 @@ function buildAssistantExtractor(functionName: string): string {
       if (testId.includes('assistant')) {
         return true;
       }
-      return Boolean(node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
+      return Boolean(node.matches?.(ASSISTANT_SELECTOR) || node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
     };
 
     const expandCollapsibles = (root) => {
@@ -1283,6 +1283,7 @@ function buildAssistantExtractor(functionName: string): string {
       expandCollapsibles(messageRoot);
       const preferred =
         (messageRoot.matches?.('.markdown') || messageRoot.matches?.('[data-message-content]') ? messageRoot : null) ||
+        messageRoot.querySelector('[data-markdown-text-style="assistant-message"]') ||
         messageRoot.querySelector('.markdown') ||
         messageRoot.querySelector('[data-message-content]') ||
         messageRoot.querySelector('[data-testid*="message"]') ||
@@ -1515,7 +1516,7 @@ function buildCopyExpression(meta: { messageId?: string | null; turnId?: string 
         if (role === 'assistant') return true;
         const testId = (node.getAttribute('data-testid') || '').toLowerCase();
         if (testId.includes('assistant')) return true;
-        return Boolean(node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
+        return Boolean(node.matches?.(ASSISTANT_SELECTOR) || node.querySelector(ASSISTANT_SELECTOR) || node.querySelector('[data-testid*="assistant"]'));
       };
       const turns = ${buildConversationTurnListExpression()};
       for (let i = turns.length - 1; i >= 0; i -= 1) {

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser (lilpacy fork): support the current ChatGPT model/effort picker and search-key conversation markup, including sibling response actions for completion and Markdown capture.
+
 - Browser: warn when a configured Chrome executable cannot replace a running shared profile, explain how to switch safely, and share reuse handling with Project Sources; fixes #510, thanks @Sogl.
 
 ## 0.21.3 - 2026-09-24

@@ -701,6 +701,7 @@ function buildThinkingTimeExpression(
       if (!isVisible(menu)) return false;
       if (menu.getAttribute?.('data-testid') === 'composer-intelligence-picker-content') return true;
       if (menu.querySelector?.(INTELLIGENCE_MENU_SELECTOR)) return true;
+      if (menu.querySelector?.('[data-model-picker-view] [data-reasoning-slider="true"]')) return true;
       const label = menu.querySelector?.('.__menu-label, [class*="menu-label"]');
       const labelText = normalize(label?.textContent ?? '');
       return (
@@ -1101,15 +1102,18 @@ function buildThinkingTimeExpression(
     // the slider's maximum position alone proves that Pro was selected.
     const selectDirectEffortSlider = async (menu) => {
       const view = menu.querySelector?.('[data-model-selection-view="true"]');
-      const simple = view?.querySelector?.('[data-testid="composer-model-picker-slider-simple-view"]');
-      if (!simple || simple.getAttribute('data-active') !== 'true' || !isVisible(simple)) return null;
+      const simple = menu.querySelector?.('[data-model-picker-view="simple"]') ||
+        view?.querySelector?.('[data-testid="composer-model-picker-slider-simple-view"]');
+      const isSimpleActive = (node) => node?.getAttribute('data-model-picker-view') === 'simple' || node?.getAttribute('data-active') === 'true';
+      if (!simple || !isSimpleActive(simple) || !isVisible(simple)) return null;
       const resolve = () => {
         const currentView = menu.querySelector?.('[data-model-selection-view="true"]');
-        const currentSimple = currentView?.querySelector?.('[data-testid="composer-model-picker-slider-simple-view"]');
-        if (currentSimple?.getAttribute('data-active') !== 'true') return null;
+        const currentSimple = menu.querySelector?.('[data-model-picker-view="simple"]') ||
+          currentView?.querySelector?.('[data-testid="composer-model-picker-slider-simple-view"]');
+        if (!isSimpleActive(currentSimple)) return null;
         const slider = currentSimple.querySelector('[data-model-reasoning-effort-slider]');
-        const control = slider?.closest?.('[role="menuitem"]');
-        const thumb = slider?.querySelector?.('[role="slider"]');
+        const control = currentSimple.querySelector('[data-reasoning-slider="true"]') || slider?.closest?.('[role="menuitem"]');
+        const thumb = control?.querySelector?.('[role="slider"]');
         if (!control || !thumb || !isVisible(control)) return null;
         const levels = ['light', 'standard', 'extended', 'extra-high', 'pro'];
         // The selected label leads localized aria-describedby prose, while punctuation
@@ -1194,6 +1198,7 @@ function buildThinkingTimeExpression(
     // controlled menu contains the effort levels. Prefer this ownership boundary
     // before probing older model-picker layouts.
     const COMPOSER_EFFORT_PILL_SELECTORS = [
+      'form button[data-codex-intelligence-trigger="true"]',
       'form button.__composer-pill',
       '[data-testid="composer-footer-actions"] button.__composer-pill',
       '.__composer-pill-composite button.__composer-pill',
@@ -1205,6 +1210,7 @@ function buildThinkingTimeExpression(
         for (const button of document.querySelectorAll(selector)) {
           if (seen.has(button) || !isVisible(button)) continue;
           seen.add(button);
+          if (button.getAttribute?.('data-codex-intelligence-trigger') === 'true') return button;
           if (button.getAttribute?.('data-testid') === 'model-switcher-dropdown-button') continue;
           // A 5.6 Pro model pill is not Astra Latest's 6-prefixed effort owner.
           // Keep this rejection ahead of the generic compatibility matcher.

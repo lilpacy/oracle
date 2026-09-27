@@ -1,3 +1,9 @@
+> Maintained fork: [lilpacy/oracle](https://github.com/lilpacy/oracle).
+> Includes the September 2026 ChatGPT browser DOM patch. Use the local checkout
+> installed with `pnpm install --frozen-lockfile` (prepare builds the CLI), then
+> `node dist/bin/oracle-cli.js`. The upstream Homebrew/npm packages do not include this patch.
+> Run `pnpm test:browser:dom` with Chrome installed for the offline DOM regression check.
+
 # oracle 🧿 — Bring a second brain, not a second briefing
 
 <p align="center">

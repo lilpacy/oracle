@@ -23,6 +23,7 @@ export const INPUT_SELECTORS = [
 ];
 
 export const ANSWER_SELECTORS = [
+  'main [data-markdown-text-style="assistant-message"]',
   'article[data-testid^="conversation-turn"][data-message-author-role="assistant"]',
   'article[data-testid^="conversation-turn"][data-turn="assistant"]',
   'article[data-testid^="conversation-turn"] [data-message-author-role="assistant"]',
@@ -37,10 +38,10 @@ export const ANSWER_SELECTORS = [
 export const CONVERSATION_TURN_SELECTOR =
   'article[data-testid^="conversation-turn"], div[data-testid^="conversation-turn"], section[data-testid^="conversation-turn"], ' +
   "article[data-message-author-role], div[data-message-author-role], section[data-message-author-role], " +
-  "article[data-turn], div[data-turn], section[data-turn]";
+  'article[data-turn], div[data-turn], section[data-turn], main [data-chatgpt-search-unit-key$=":user"], main [data-chatgpt-search-unit-key$=":assistant"]';
 export const CONVERSATION_TURN_CONTAINER_SELECTOR = '[data-testid^="conversation-turn"]';
 export const ASSISTANT_ROLE_SELECTOR =
-  '[data-message-author-role="assistant"], [data-turn="assistant"]';
+  '[data-message-author-role="assistant"], [data-turn="assistant"], [data-chatgpt-search-unit-key$=":assistant"]';
 export const CLOUDFLARE_SCRIPT_SELECTOR = 'script[src*="/challenge-platform/"]';
 export const CLOUDFLARE_TITLE = "just a moment";
 export const PROMPT_PRIMARY_SELECTOR = "#prompt-textarea";
@@ -91,9 +92,10 @@ export const SEND_BUTTON_SELECTORS = [
 ];
 export const SEND_BUTTON_SELECTOR = SEND_BUTTON_SELECTORS[0];
 export const MODEL_BUTTON_SELECTOR =
-  '[data-testid="model-switcher-dropdown-button"], button.__composer-pill[aria-haspopup="menu"]';
+  '[data-testid="model-switcher-dropdown-button"], button.__composer-pill[aria-haspopup="menu"], button[data-codex-intelligence-trigger="true"]';
 export const COMPOSER_MODEL_SIGNAL_SELECTOR = '[data-testid="composer-footer-actions"]';
-export const COPY_BUTTON_SELECTOR = 'button[data-testid="copy-turn-action-button"]';
+export const COPY_BUTTON_SELECTOR =
+  'button[data-testid="copy-turn-action-button"], button[aria-label="Copy"]:not([data-markdown-text-style="assistant-message"] button)';
 // Action buttons that only appear once a turn has finished rendering.
 export const DEEP_RESEARCH_PLUS_BUTTON = '[data-testid="composer-plus-btn"]';
 export const DEEP_RESEARCH_DROPDOWN_ITEM_TEXT = "Deep research";
